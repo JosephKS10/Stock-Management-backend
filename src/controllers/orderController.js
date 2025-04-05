@@ -14,10 +14,17 @@ exports.createOrder = async (req, res) => {
       return res.status(400).json({ message: "Exactly 5 cleaner room photos are required" });
     }
 
-    // Validate order items
+    // Validate all photos are S3 URLs
+    const isValidUrl = (url) => url.startsWith('https://') && url.includes('.amazonaws.com');
+    
+    if (!cleaner_room_photos.every(isValidUrl)) {
+      return res.status(400).json({ message: "Invalid room photo URLs" });
+    }
+
     for (const item of order_items) {
-      if (!item.product_id || !item.product_name || !item.quantity || item.item_photos.length !== 2) {
-        return res.status(400).json({ message: "Each order item must have a valid structure" });
+      if (!item.product_id || !item.product_name || !item.quantity || 
+          !item.item_photos || !item.item_photos.every(isValidUrl)) {
+        return res.status(400).json({ message: "Each order item must have a valid structure with S3 URLs" });
       }
     }
 

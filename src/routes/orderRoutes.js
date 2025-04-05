@@ -1,9 +1,18 @@
 const express = require("express");
 const router = express.Router();
+const multer = require('multer');
+const upload = multer();
+
 const { authenticateToken } = require("../middleware/authMiddleware");
 const orderController = require("../controllers/orderController");
+const imageController = require("../controllers/imageController");
 
 // ✅ Protected API - Requires Auth Token
+
+// Image upload route
+router.post("/upload-image", authenticateToken, upload.single('image'), imageController.uploadImage);
+
+// Order routes
 router.get("/active", authenticateToken, orderController.getActiveOrders);
 router.get("/completed", authenticateToken, orderController.getCompletedOrders);
 router.get("/:orderNumber", authenticateToken, orderController.getOrderById); // Get a single order
