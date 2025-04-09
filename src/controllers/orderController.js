@@ -108,7 +108,7 @@ exports.getActiveOrders = async (req, res) => {
       // Find last 3 orders before or on the given date for the same site
       const lastOrders = await Order.find({
         "site_info.site_id": site_id,
-        order_date: { $lte: orderDate } // Orders on or before the given date
+        order_date: { $lt: orderDate } // Orders strictly before the given date
       })
         .sort({ order_date: -1 }) // Sort by latest order date
         .limit(3); // Get last 3 orders

@@ -21,7 +21,7 @@ exports.authenticate = async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ site_id: site._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    const token = jwt.sign({ site_id: site._id }, process.env.JWT_SECRET, { expiresIn: "6h" });
 
     res.json({
       message: "Authentication successful",
